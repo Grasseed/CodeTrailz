@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TreeForSuccess;
-using TreeForSuccess.Model;
 
-namespace TreeForSuccess
+namespace TreeForSuccess.Model
 {
     public class GoalModel
     {
@@ -22,13 +21,5 @@ namespace TreeForSuccess
             var result = _dapperServices.ExecuteSQLWithReturn<Goal>(sql, new { Goal = GoalName});
             return result;
         }
-
-        public User? GetUserInfo (string UserName)
-        {
-            string sql = "SELECT * FROM Users WHERE Name=@Name";
-            var result = _dapperServices.ExecuteSQLWithReturn<User>(sql, new { Name = UserName});
-            return result;
-        }
-
     }
 }

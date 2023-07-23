@@ -9,24 +9,14 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using TreeForSuccess;
 using Microsoft.VisualBasic;
+using TreeForSuccess.Model;
+using TreeForSuccess.Utilities;
 
 namespace APIGoalController{
     [ApiController]
     [Route("[controller]")]
-    public class APIGoalController{
-        #region BasicSetting
-        // JSON 中文設定不轉換Unicode
-        private static JsonSerializerOptions GetJsonSettings()
-        {
-            var options = new JsonSerializerOptions
-            {
-                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            };
-            return options;
-        }
-
-        #endregion
-
+    public class APIGoalController
+    {
         #region APIs
 
         private readonly GoalModel goalModel;
@@ -40,7 +30,7 @@ namespace APIGoalController{
         [HttpGet("GetGoalSetting")]
         public ActionResult<string> GetGoalSetting(string GoalName)
         {
-            return JsonSerializer.Serialize(goalModel.GetGoalSetting(GoalName), GetJsonSettings());
+            return JsonSerializer.Serialize(goalModel.GetGoalSetting(GoalName), JsonSettings.GetJsonSettings());
         }
         #endregion
     }
