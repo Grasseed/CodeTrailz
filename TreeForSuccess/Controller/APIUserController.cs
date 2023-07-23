@@ -11,7 +11,7 @@ namespace TreeForSuccess.Controller
 {
     [ApiController]
     [Route("[controller]")]
-    public class APIUserController
+    public class APIUserController : ControllerBase
     {
         #region APIs
 
@@ -31,9 +31,17 @@ namespace TreeForSuccess.Controller
 
         // User Sign Up Account
         [HttpPost("UserSignUp")]
-        public ActionResult<object> UserSignUp(object obj)
+        public IActionResult UserSignUp([FromBody] User user)
         {
-            return JsonSerializer.Serialize(obj, JsonSettings.GetJsonSettings());
+            var registeredUser = userModel.UserSignUp(user);
+            if (registeredUser == null)
+            {
+                // Return a 400 Bad Request status code and a message if registration failed
+                return BadRequest("Registration failed");
+            }
+
+            // Return a 200 OK status code and a success message
+            return Ok("Registration successful");
         }
         #endregion
     }

@@ -15,7 +15,7 @@ using TreeForSuccess.Utilities;
 namespace APIGoalController{
     [ApiController]
     [Route("[controller]")]
-    public class APIGoalController
+    public class APIGoalController : ControllerBase
     {
         #region APIs
 

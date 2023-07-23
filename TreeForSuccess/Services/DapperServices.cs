@@ -43,5 +43,16 @@ namespace TreeForSuccess
             var result = dbConnection.Query<T>(sql, parameters);
             return result.FirstOrDefault() != null ? result.FirstOrDefault() : default;
         }
+        
+        // 執行SQL但不返回結果的方法
+        // sql: 要執行的SQL語句
+        // parameters: SQL語句的參數（如果有的話）
+        public void ExecuteSQL(string sql, object? parameters = null)
+        {
+            using IDbConnection dbConnection = Connection;
+            dbConnection.Open();
+            dbConnection.Execute(sql, parameters);
+        }
+
     }
 }
