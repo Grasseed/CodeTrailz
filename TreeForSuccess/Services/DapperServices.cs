@@ -41,7 +41,7 @@ namespace TreeForSuccess
             using IDbConnection dbConnection = Connection;
             dbConnection.Open();
             var result = dbConnection.Query<T>(sql, parameters);
-            return result.FirstOrDefault() != null ? result.FirstOrDefault() : default;
+            return result.FirstOrDefault() ?? default; // 如果查詢結果為空，則返回該類型的默認值
         }
         
         // 執行SQL但不返回結果的方法
