@@ -15,10 +15,17 @@ namespace TreeForSuccess.Model
             _dapperServices = dapperServices;
         }
 
+        public Goal? SetGoal (Goal goalName)
+        {
+            string sql = "INSERT INTO dbo.Goal(UserID, GoalName) VALUES (@UserID, @GoalName)";
+            _dapperServices.ExecuteSQL(sql, goalName);
+            return goalName; // Return the user object regardless of whether the SQL execution was successful
+        }
+
         public Goal? GetGoalSetting (string GoalName)
         {
-            string sql = "SELECT * FROM Goal WHERE GoalName=@Goal";
-            var result = _dapperServices.ExecuteSQLWithReturn<Goal>(sql, new { Goal = GoalName});
+            string sql = "SELECT * FROM Goal WHERE GoalName=@GoalName";
+            var result = _dapperServices.ExecuteSQLWithReturn<Goal>(sql, new { GoalName});
             return result;
         }
     }

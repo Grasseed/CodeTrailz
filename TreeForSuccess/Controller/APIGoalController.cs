@@ -27,6 +27,20 @@ namespace APIGoalController{
         }
         
         // Get Goal Setting
+        [HttpPost("SetGoal")]
+        public IActionResult SetGoal([FromBody] Goal goal)
+        {
+             var setGoal = goalModel.SetGoal(goal);
+            if (setGoal == null)
+            {
+                // Return a 400 Bad Request status code and a message if registration failed
+                return BadRequest("Set failed");
+            }
+
+            // Return a 200 OK status code and a success message
+            return Ok("Set successful");
+        }
+        // Get Goal Setting
         [HttpGet("GetGoalSetting")]
         public ActionResult<string> GetGoalSetting(string GoalName)
         {
