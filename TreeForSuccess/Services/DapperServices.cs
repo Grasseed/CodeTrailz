@@ -43,15 +43,23 @@ namespace TreeForSuccess
         }
 
 		/// <summary>
-		/// 執行SQL但不返回結果的方法
+		/// 執行SQL，返回執行是否成功
 		/// </summary>
 		/// <param name="sql">執行的SQL語句</param>
 		/// <param name="parameters">SQL語句的參數</param>
-		public void ExecuteSQL(string sql, object? parameters = null)
+		public bool ExecuteSQL(string sql, object? parameters = null)
         {
-            using IDbConnection dbConnection = Connection;
-            dbConnection.Open();
-            dbConnection.Execute(sql, parameters);
+            try
+            {
+                using IDbConnection dbConnection = Connection;
+                dbConnection.Open();
+                dbConnection.Execute(sql, parameters);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
     }
