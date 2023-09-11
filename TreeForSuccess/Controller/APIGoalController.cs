@@ -1,14 +1,5 @@
-using System;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using TreeForSuccess;
-using Microsoft.VisualBasic;
 using TreeForSuccess.Model;
 using TreeForSuccess.Utilities;
 
@@ -30,21 +21,43 @@ namespace APIGoalController{
         [HttpPost("SetGoal")]
         public IActionResult SetGoal([FromBody] Goal goal)
         {
-             var setGoal = goalModel.SetGoal(goal);
-            if (setGoal == null)
+            try
             {
-                // Return a 400 Bad Request status code and a message if registration failed
-                return BadRequest("Set failed");
-            }
+                var setGoal = goalModel.SetGoal(goal);
+                if (setGoal == null)
+                {
+                    // Return a 400 Bad Request status code and a message if registration failed
+                    return BadRequest("Set failed");
+                }
 
-            // Return a 200 OK status code and a success message
-            return Ok("Set successful");
+                // Return a 200 OK status code and a success message
+                return Ok("Set successful");
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
         // Get Goal Setting
         [HttpGet("GetGoalSetting")]
-        public ActionResult<string> GetGoalSetting(string GoalName)
+        public IActionResult GetGoalSetting([FromBody] string GoalName)
         {
-            return JsonSerializer.Serialize(goalModel.GetGoalSetting(GoalName), JsonSettings.GetJsonSettings());
+            try
+            {
+                var goalSetting = goalModel.GetGoalSetting(GoalName);
+                if (goalModel == null)
+                {
+					// Return a 400 Bad Request status code and a message if registration failed
+					return BadRequest("Get goal settings failed");
+				}
+
+				// Return a 200 OK status code and get goal settings
+				return Ok(JsonSerializer.Serialize(goalModel.GetGoalSetting(GoalName), JsonSettings.GetJsonSettings()));
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
         #endregion
     }

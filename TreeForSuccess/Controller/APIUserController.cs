@@ -24,24 +24,46 @@ namespace TreeForSuccess.Controller
 
         // Get User Informations
         [HttpGet("GetUserInfo")]
-        public ActionResult<string> GetUserInfo(string UserName)
+        public IActionResult GetUserInfo([FromBody] string userName)
         {
-            return JsonSerializer.Serialize(userModel.GetUserInfo(UserName), JsonSettings.GetJsonSettings());
+            try
+            {
+                var userInfo = userModel.GetUserInfo(userName);
+                if (userInfo == null)
+                {
+				    // Return a 400 Bad Request status code and a message if get user info failed
+				    return BadRequest("Get user info failed");
+			    }
+
+			    // Return a 200 OK status code and user info
+			    return Ok(JsonSerializer.Serialize(userModel.GetUserInfo(userName), JsonSettings.GetJsonSettings()));
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // User Sign Up Account
         [HttpPost("UserSignUp")]
         public IActionResult UserSignUp([FromBody] User user)
         {
-            var registeredUser = userModel.UserSignUp(user);
-            if (registeredUser == null)
+            try
             {
-                // Return a 400 Bad Request status code and a message if registration failed
-                return BadRequest("Registration failed");
-            }
+                var registeredUser = userModel.UserSignUp(user);
+                if (registeredUser == null)
+                {
+                    // Return a 400 Bad Request status code and a message if registration failed
+                    return BadRequest("Registration failed");
+                }
 
-            // Return a 200 OK status code and a success message
-            return Ok("Registration successful");
+                // Return a 200 OK status code and a success message
+                return Ok("Registration successful");
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
         #endregion
     }

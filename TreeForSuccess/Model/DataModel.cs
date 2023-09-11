@@ -10,10 +10,6 @@ namespace TreeForSuccess.Model
 {
     public class User
     {
-        public byte[] HashPassword(string password)
-        {
-            return SHA256.HashData(Encoding.UTF8.GetBytes(password));
-        }
         public Guid? GUID { get; set; }
         public required string Name { get; set; }
         public int Gender { get; set; }
@@ -31,7 +27,10 @@ namespace TreeForSuccess.Model
         public DateTime? InsertTime { get; set; }
         public DateTime? UpdateTime { get; set; }
         public int DataStatus { get; set; }
-
+        public byte[] HashPassword(string password)
+        {
+            return SHA256.HashData(Encoding.UTF8.GetBytes(password));
+        }
     }
 
     public class Goal
