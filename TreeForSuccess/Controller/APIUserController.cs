@@ -22,7 +22,7 @@ namespace TreeForSuccess.Controller
             userModel = _userModel;
         }
 
-		// User loggin
+		// User login
 		[HttpPost("Login")]
         public IActionResult Login(Login login)
         {

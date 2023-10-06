@@ -39,11 +39,11 @@ namespace TreeForSuccess.Model
 		public required string Name { get; set; }
 		public int Gender { get; set; }
 		public required string Mail { get; set; }
+		public DateTime? InsertTime { get; set; }
+		public DateTime? UpdateTime { get; set; }
 
 		[JsonIgnore]
 		public byte[] Password { get; set; }
-		public DateTime? InsertTime { get; set; }
-		public DateTime? UpdateTime { get; set; }
 		public int DataStatus { get; set; }
 		public byte[] HashPassword(string password)
 		{
