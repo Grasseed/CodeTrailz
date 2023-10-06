@@ -24,7 +24,7 @@ namespace APIGoalController{
             try
             {
                 var setGoal = goalModel.SetGoal(goal);
-                if (setGoal == null)
+                if (!setGoal)
                 {
                     // Return a 400 Bad Request status code and a message if registration failed
                     return BadRequest("Set failed");
@@ -52,7 +52,7 @@ namespace APIGoalController{
 				}
 
 				// Return a 200 OK status code and get goal settings
-				return Ok(JsonSerializer.Serialize(goalModel.GetGoalSetting(GoalName), JsonSettings.GetJsonSettings()));
+				return Ok(JsonSerializer.Serialize(goalSetting, JsonSettings.GetJsonSettings()));
             }
             catch (Exception ex) 
             {
