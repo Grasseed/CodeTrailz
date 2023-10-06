@@ -22,13 +22,33 @@ namespace TreeForSuccess.Controller
             userModel = _userModel;
         }
 
-        // Get User Informations
-        [HttpGet("GetUserInfo")]
-        public IActionResult GetUserInfo([FromBody] string userName)
+		// User loggin
+		[HttpPost("Login")]
+        public IActionResult Login(Login login)
         {
             try
             {
-                var userInfo = userModel.GetUserInfo(userName);
+                if ( (string.IsNullOrEmpty(login.Name) && string.IsNullOrEmpty(login.Mail)) || string.IsNullOrEmpty(login.PasswordString))
+                {
+					return BadRequest("Login failed, one or more required parameter not received");
+				}
+
+				// Return a 200 OK status code and login success
+				return Ok(userModel.Login(login) ? "Login success" : "Login failed");
+			}
+            catch (Exception ex)
+            {
+                return BadRequest("Login failed");
+			}
+        }
+
+		// Get User Informations
+		[HttpGet("GetUserInfo")]
+        public IActionResult GetUserInfo(string userName, string mail)
+        {
+            try
+            {
+                var userInfo = userModel.GetUserInfo(userName, mail);
                 if (userInfo == null)
                 {
 				    // Return a 400 Bad Request status code and a message if get user info failed
@@ -36,7 +56,7 @@ namespace TreeForSuccess.Controller
 			    }
 
 			    // Return a 200 OK status code and user info
-			    return Ok(JsonSerializer.Serialize(userModel.GetUserInfo(userName), JsonSettings.GetJsonSettings()));
+			    return Ok(JsonSerializer.Serialize(userInfo, JsonSettings.GetJsonSettings()));
             }
             catch (Exception ex) 
             {
@@ -46,7 +66,7 @@ namespace TreeForSuccess.Controller
 
         // User Sign Up Account
         [HttpPost("UserSignUp")]
-        public IActionResult UserSignUp([FromBody] User user)
+        public IActionResult UserSignUp(UserRequest user)
         {
             try
             {

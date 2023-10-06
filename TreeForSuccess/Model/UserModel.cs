@@ -20,13 +20,52 @@ namespace TreeForSuccess.Model
         {
             _dapperServices = dapperServices;
         }
-        public User? GetUserInfo (string UserName)
+        public bool Login(Login login)
         {
-            string sql = "SELECT * FROM Users WHERE Name=@Name";
-            var result = _dapperServices.ExecuteSQLWithReturn<User>(sql, new { Name = UserName});
+            try
+            {
+                if ( (string.IsNullOrEmpty(login.Name) && string.IsNullOrEmpty(login.Mail)) || string.IsNullOrEmpty(login.PasswordString) )
+                {
+                    return false;
+                }
+
+                var user = GetUserInfo(login.Name, login.Mail);
+
+				if (user == null)
+				{
+					return false;
+				}
+
+				byte[] hashedPassword = HashPassword(login.PasswordString);
+
+				if (!user.Password.SequenceEqual(hashedPassword))
+				{
+					return false;
+				}
+                return true;
+			}
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public UserResponse? GetUserInfo (string? UserName, string? Mail)
+        {
+            var sql = "SELECT [GUID], [Name], [Mail], [Password] FROM [Users] WHERE 1 = 1";
+            if (UserName != null)
+            {
+                sql += "AND [Name] = @Name ";
+			}
+            if (Mail != null)
+            {
+                sql += "AND [Mail] = @Mail ";
+			}
+            
+			var parameters = new { Name = UserName, Mail = Mail };
+			var result = _dapperServices.ExecuteSQLWithReturn<UserResponse>(sql, parameters);
             return result;
         }
-        public User? UserSignUp(User user)
+        public UserRequest? UserSignUp(UserRequest user)
         {
             string sql = @"INSERT INTO Users (Name, Gender, Mail, Password, DataStatus) 
                         VALUES (@Name, @Gender, @Mail, @Password, @DataStatus)";
