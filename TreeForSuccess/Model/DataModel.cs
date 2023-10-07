@@ -43,7 +43,7 @@ namespace TreeForSuccess.Model
 		public DateTime? UpdateTime { get; set; }
 
 		[JsonIgnore]
-		public byte[] Password { get; set; }
+		public byte[]? Password { get; set; }
 		public int DataStatus { get; set; }
 		public byte[] HashPassword(string password)
 		{

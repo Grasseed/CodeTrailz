@@ -1,14 +1,16 @@
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using TreeForSuccess.Model;
 
-namespace TreeForSuccess.Model
+namespace TreeForSuccess.Controller
 {
-    public class UserModel
-    {
+    public class UserController : ControllerBase
+	{
         private DapperServices _dapperServices;
         public byte[] HashPassword(string password)
         {
@@ -16,7 +18,7 @@ namespace TreeForSuccess.Model
         }
 
 
-        public UserModel(DapperServices dapperServices)
+        public UserController(DapperServices dapperServices)
         {
             _dapperServices = dapperServices;
         }
@@ -24,45 +26,45 @@ namespace TreeForSuccess.Model
         {
             try
             {
-                if ( (string.IsNullOrEmpty(login.Name) && string.IsNullOrEmpty(login.Mail)) || string.IsNullOrEmpty(login.PasswordString) )
+                if (string.IsNullOrEmpty(login.Name) && string.IsNullOrEmpty(login.Mail) || string.IsNullOrEmpty(login.PasswordString))
                 {
                     return false;
                 }
 
                 var user = GetUserInfo(login.Name, login.Mail);
 
-				if (user == null)
-				{
-					return false;
-				}
+                if (user == null)
+                {
+                    return false;
+                }
 
-				byte[] hashedPassword = HashPassword(login.PasswordString);
+                byte[] hashedPassword = HashPassword(login.PasswordString);
 
-				if (!user.Password.SequenceEqual(hashedPassword))
-				{
-					return false;
-				}
+                if (!user.Password.SequenceEqual(hashedPassword))
+                {
+                    return false;
+                }
                 return true;
-			}
+            }
             catch (Exception ex)
             {
                 return false;
             }
         }
-        public UserResponse? GetUserInfo (string? UserName, string? Mail)
+        public UserResponse? GetUserInfo(string? UserName, string? Mail)
         {
             var sql = "SELECT [GUID], [Name], [Mail], [Password] FROM [Users] WHERE 1 = 1";
             if (UserName != null)
             {
                 sql += "AND [Name] = @Name ";
-			}
+            }
             if (Mail != null)
             {
                 sql += "AND [Mail] = @Mail ";
-			}
-            
-			var parameters = new { Name = UserName, Mail = Mail };
-			var result = _dapperServices.ExecuteSQLWithReturn<UserResponse>(sql, parameters);
+            }
+
+            var parameters = new { Name = UserName, Mail };
+            var result = _dapperServices.ExecuteSQLWithReturn<UserResponse>(sql, parameters);
             return result;
         }
         public UserRequest? UserSignUp(UserRequest user)

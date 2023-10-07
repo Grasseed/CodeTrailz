@@ -1,18 +1,20 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using TreeForSuccess.Controller;
 using TreeForSuccess.Model;
 using TreeForSuccess.Utilities;
 
-namespace APIGoalController{
+namespace APIGoalController
+{
     [ApiController]
     [Route("[controller]")]
     public class APIGoalController : ControllerBase
     {
         #region APIs
 
-        private readonly GoalModel goalModel;
+        private readonly GoalController goalModel;
 
-        public APIGoalController(GoalModel _goalModel)
+        public APIGoalController(GoalController _goalModel)
         {
             goalModel = _goalModel;
         }

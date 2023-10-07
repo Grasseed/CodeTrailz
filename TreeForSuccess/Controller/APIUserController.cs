@@ -15,9 +15,9 @@ namespace TreeForSuccess.Controller
     {
         #region APIs
 
-        private readonly UserModel userModel;
+        private readonly UserController userModel;
 
-        public APIUserController(UserModel _userModel)
+        public APIUserController(UserController _userModel)
         {
             userModel = _userModel;
         }
